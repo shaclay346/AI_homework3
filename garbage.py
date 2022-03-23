@@ -12,10 +12,20 @@ pq.put((4.5, unsolved))
 pq.put((3.2, [0, 2, 4, 5]))
 pq.put((1, unsolved))
 
-print(pq.get(4.5))
-print(pq.get(4.5))
-print(pq.get(4.5))
-print(pq.get(4.5))
+costToState = {}
+x = [0, 4, 7, 9]
+# print("U" in costToState.keys())
+costToState[tuple(x)] = "12"
+print(costToState[tuple(x)])
+
+# actions = "UDLRFB"
+# for i in actions:
+#     print(i)
+
+# print(pq.get(4.5))
+# print(pq.get(4.5))
+# print(pq.get(4.5))
+# print(pq.get(4.5))
 # print(pq.)
 # side = []
 # counter = 0
