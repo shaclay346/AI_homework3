@@ -143,6 +143,8 @@ def astar(state, verbose=False):
         if((cost('', currState) == 0) and currPath != ""):
             # goal state found
             print("GOAL found")
+            print(currState)
+            print(currPath)
             break
 
         for i in actions:
@@ -154,26 +156,25 @@ def astar(state, verbose=False):
             # print(newPath)
 
             result = simulate(currState, i)
-            print(result)
+            # print(result)
 
             newCost = cost(newPath, result)
-            print(newCost)
+            # print(newCost)
             # pdb.set_trace()
 
             # python rubiks.py -s state01.txt
-           # print('cost at path', costToState[newPath])
             if(newPath not in visited):
                 pq.put((newCost, result, newPath))
                 backpointers[newPath] = currPath
                 visited.append(newPath)
                 costToState[newPath] = newCost
-                # print("here")
+                print('here')
             elif(newPath in costToState.keys()):
                 if(costToState[newPath] > newCost):
                     pq.put((newCost, result, newPath))
                     backpointers[newPath] = currPath
                     costToState[newPath] = newCost
-                    #print(" down here")
+                    print(" down here")
 
     # I'm thinking I will go through all possible moves and calculate the cost by calling cost() on all of them
     # then I will add all of those to the pq
@@ -225,7 +226,7 @@ def simulate(state, node):
     for i in range(len(node)):
         # call the rotate method to simulate rotating each direction
         # maybe call rotate on both directions CW CCW
-        rotate(state, node[i])
+        rotate(s, node[i])
     # for i in range(len(node)):
     #     pass
         # rotate(state, nodes[i], 'CCW')

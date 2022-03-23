@@ -27,18 +27,18 @@ print(costToState[tuple(x)])
 # print(pq.get(4.5))
 # print(pq.get(4.5))
 # print(pq.)
-# side = []
-# counter = 0
-# numDifferent = 0
-# for i in range(len(solved)):
-#     side.append(solved[i])
-#     counter += 1
-#     if(counter % 9 == 0):
-#         middle = side[4]
-#         for j in range(len(side)):
-#             if(side[j] != middle):
-#                 numDifferent += 1
-#         side = []
-#         # add the num different to something to store it before we caclculate the avg
-# avg = numDifferent / 6
-# print(avg)
+side = []
+counter = 0
+numDifferent = 0
+for i in range(len(solved)):
+    side.append(solved[i])
+    counter += 1
+    if(counter % 9 == 0):
+        middle = side[4]
+        for j in range(len(side)):
+            if(side[j] != middle):
+                numDifferent += 1
+        side = []
+        # add the num different to something to store it before we caclculate the avg
+avg = numDifferent / 6
+print(avg)
