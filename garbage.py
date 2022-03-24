@@ -12,21 +12,13 @@ pq.put((4.5, unsolved))
 pq.put((3.2, [0, 2, 4, 5]))
 pq.put((1, unsolved))
 
-costToState = {}
-x = [0, 4, 7, 9]
-# print("U" in costToState.keys())
-costToState[tuple(x)] = "12"
-print(costToState[tuple(x)])
+actions = "udlrfbUDLRFB"
 
-# actions = "UDLRFB"
-# for i in actions:
-#     print(i)
+for i in actions:
+    if(i.islower()):
+        print(i.upper())
 
-# print(pq.get(4.5))
-# print(pq.get(4.5))
-# print(pq.get(4.5))
-# print(pq.get(4.5))
-# print(pq.)
+
 side = []
 counter = 0
 numDifferent = 0
@@ -41,4 +33,4 @@ for i in range(len(solved)):
         side = []
         # add the num different to something to store it before we caclculate the avg
 avg = numDifferent / 6
-print(avg)
+# print(avg)

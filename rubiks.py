@@ -37,7 +37,6 @@ def main(args):
         T1 = list(file.read())
 
         current_state = list(map(int, T1))
-        # print(current_state)
     else:
         for i in range(6):
             current_state += [i] * params['n'] ** 2
@@ -112,12 +111,13 @@ def astar(state, verbose=False):
     print('Running A* search...')
     # ***ENTER CODE HERE*** (20-25 lines)
     cnt = 0
+    solution = ""
     pq = PriorityQueue()
     visited = []
     costToState = {
 
     }
-    startingState = state
+    # startingState = state
 
     # last state -> (state, move to get there like 'L)   this way when we are looping throught
     # backpointers at the end we know the move we took to get there
@@ -126,14 +126,11 @@ def astar(state, verbose=False):
     # save state, current path and total cost
     pq.put((0, state, ""))
     costToState[""] = 0
-    actions = "UDLRFB"
+    actions = "udlrbfUDLRFB"
 
     while(not pq.empty()):
         curr = pq.get()
-
-        # might not even need to save state at all. idk
-        # if this method with saving the path in costToState doesn't work
-        # then I'll try the tuple thing where the tuple is dict key
+        cnt += 1
 
         currCost = curr[0]
         currState = curr[1]
@@ -145,6 +142,7 @@ def astar(state, verbose=False):
             print("GOAL found")
             print(currState)
             print(currPath)
+            solution = currPath
             break
 
         for i in actions:
@@ -153,36 +151,24 @@ def astar(state, verbose=False):
             # in the pq save state and then node(path) and maybe the length of it too
             # paths might be how many things came out of pq
             newPath = currPath + i
-            # print(newPath)
 
             result = simulate(currState, i)
-            # print(result)
 
             newCost = cost(newPath, result)
-            # print(newCost)
-            # pdb.set_trace()
 
-            # python rubiks.py -s state01.txt
             if(newPath not in visited):
                 pq.put((newCost, result, newPath))
                 backpointers[newPath] = currPath
                 visited.append(newPath)
                 costToState[newPath] = newCost
-                print('here')
             elif(newPath in costToState.keys()):
                 if(costToState[newPath] > newCost):
                     pq.put((newCost, result, newPath))
                     backpointers[newPath] = currPath
                     costToState[newPath] = newCost
-                    print(" down here")
-
-    # I'm thinking I will go through all possible moves and calculate the cost by calling cost() on all of them
-    # then I will add all of those to the pq
-    # the goal will be the solved cube so after each move the heursitic h(n) is determined so maybe the states with cost are what goes in the PQ
-    # and from each state that you dequeue, you add the possible moves with cost for that state to pq
 
     print(f'searched {cnt} paths')
-    print('solution:', '')
+    print('solution:', solution)
 
 
 def cost(node, state):
@@ -213,7 +199,7 @@ def cost(node, state):
             side = []
             # add the num different to something to store it before we caclculate the avg
     h = numDifferent / 6
-    print('g is ', g, 'h is ', h)
+    # print('g is ', g, 'h is ', h)
 
     return g + h
 
@@ -224,12 +210,21 @@ def simulate(state, node):
     s = state.copy()
     # ***ENTER CODE HERE***  (4 lines)
     for i in range(len(node)):
-        # call the rotate method to simulate rotating each direction
-        # maybe call rotate on both directions CW CCW
-        rotate(s, node[i])
-    # for i in range(len(node)):
-    #     pass
-        # rotate(state, nodes[i], 'CCW')
+        if(node[i].islower()):
+            rotate(s, node
+                   [i].upper())
+            # sprint(node[i].upper())
+           # pdb.set_trace()
+            #rotate(state, node[i].upper())
+        else:
+            rotate(s, node[i], 'CCW')
+        #rotate(s, node[i])
+        # if(i == "S"):l
+        #     rotate(s, node[i], "CCW")
+        # # call the rotate method to simulate rotating each direction
+        # # maybe call rotate on both directions CW CCW
+        # else:
+        #     rotate(s, node[i])
 
     return s
 
