@@ -110,38 +110,43 @@ def astar(state, verbose=False):
     '''Run A* search on the cube based on its current state.'''
     print('Running A* search...')
     # ***ENTER CODE HERE*** (20-25 lines)
+    # initialize all the data structures we will need
     cnt = 0
     solution = ""
     pq = PriorityQueue()
     visited = []
     costToState = {
-
     }
-    # startingState = state
-
-    # last state -> (state, move to get there like 'L)   this way when we are looping throught
-    # backpointers at the end we know the move we took to get there
     backpointers = {}
+    flag = True
+
+    # condition to check if cube is already solved
+    if(cost('', state) == 0):
+        solution = ""
+        print("got here")
+        flag = False
 
     # save state, current path and total cost
     pq.put((0, state, ""))
     costToState[""] = 0
+    # create string of all possible actions, lower case are CW
+    # upper case are CCW
     actions = "udlrbfUDLRFB"
 
-    while(not pq.empty()):
+    while(not pq.empty() or flag == False):
+        # while qlueue is not empty get from the front of the queue
         curr = pq.get()
         cnt += 1
 
+        # using temp varaibles to make it easier to access data from tuple
         currCost = curr[0]
         currState = curr[1]
         currPath = curr[2]
-        # print(currPath)
 
+        # if we find a goal return the path
         if((cost('', currState) == 0) and currPath != ""):
             # goal state found
             print("GOAL found")
-            print(currState)
-            print(currPath)
             solution = currPath
             break
 
@@ -155,6 +160,7 @@ def astar(state, verbose=False):
             result = simulate(currState, i)
 
             newCost = cost(newPath, result)
+            #newCost = betterCost(newPath, result)
 
             if(newPath not in visited):
                 pq.put((newCost, result, newPath))
@@ -188,6 +194,34 @@ def cost(node, state):
     side = []
     counter = 0
     numDifferent = 0
+    # loop through current state of cube
+    for i in range(len(state)):
+        # add all squares from this side to a list
+        side.append(state[i])
+        counter += 1
+        # once we have looped 9 times we have gone over the whole side
+        if(counter % 9 == 0):
+            # get the middle color for this side
+            middle = side[4]
+            # count how many cubes are a different color on this side
+            for j in range(len(side)):
+                if(side[j] != middle):
+                    numDifferent += 1
+            side = []
+    # divide total number incorrect by 6
+    h = numDifferent / 6
+
+    return g + h
+
+
+def betterCost(node, state):
+    # this was a heuristic I thought would be better
+    # which was just counting totla number of incorrect #squares
+    # it didn't work super well, and the better heuristic in our pdf
+    # would take too long to implement. I tried :/
+    side = []
+    counter = 0
+    numDifferent = 0
     for i in range(len(state)):
         side.append(state[i])
         counter += 1
@@ -197,11 +231,9 @@ def cost(node, state):
                 if(side[j] != middle):
                     numDifferent += 1
             side = []
-            # add the num different to something to store it before we caclculate the avg
-    h = numDifferent / 6
-    # print('g is ', g, 'h is ', h)
 
-    return g + h
+    print(numDifferent + len(node))
+    return numDifferent + len(node)
 
 
 def simulate(state, node):
@@ -209,22 +241,16 @@ def simulate(state, node):
     Node is a sequence of rotations.'''
     s = state.copy()
     # ***ENTER CODE HERE***  (4 lines)
+
+    # loop through node
     for i in range(len(node)):
+        # if its lower case call rotate with CW movement
         if(node[i].islower()):
             rotate(s, node
                    [i].upper())
-            # sprint(node[i].upper())
-           # pdb.set_trace()
-            #rotate(state, node[i].upper())
+        # if its upper case call rotate with counter clockwise movement
         else:
             rotate(s, node[i], 'CCW')
-        #rotate(s, node[i])
-        # if(i == "S"):l
-        #     rotate(s, node[i], "CCW")
-        # # call the rotate method to simulate rotating each direction
-        # # maybe call rotate on both directions CW CCW
-        # else:
-        #     rotate(s, node[i])
 
     return s
 
